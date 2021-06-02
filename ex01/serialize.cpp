@@ -41,5 +41,6 @@ int main()
 	std::cout << data->n << std::endl;
 	std::cout << data->s2 << std::endl;
 
+	delete reinterpret_cast<Data *>(raw);
 	return 0;
 }
