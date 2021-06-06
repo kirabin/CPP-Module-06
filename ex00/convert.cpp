@@ -6,16 +6,17 @@ void	acuire_literal(std::string& str) {
 	int i;
 	float f;
 	double d;
+	bool is_impossible_int = false;
 	size_t len;
-
-	//TODO: handle overflow
 
 	// Integer
 	try {
 		i = std::stoi(str, &len);
 		if (str.length() == len) {
 			std::cout << "It's integer."<< std::endl << std::endl;
-			if (32 <= static_cast<char>(i) && static_cast<char>(i) <= 127)
+			if (i < -128 || i > 127)
+				std::cout << "char: impossible" << std::endl;
+			else if (32 <= static_cast<char>(i) && static_cast<char>(i) <= 127)
 				std::cout << "char: '" << static_cast<char>(i) << "'" << std::endl;
 			else
 				std::cout << "char: Non-displayable" << std::endl;
@@ -25,25 +26,36 @@ void	acuire_literal(std::string& str) {
 			return ;
 		}
 	} catch (std::exception& e) {
-		std::cout << e.what() << std::endl;
+		is_impossible_int = true;
+		// std::cout << e.what() << std::endl;
 	}
 
 	// Double
 	try {
 		d = std::stod(str, &len);
 		if (str.length() == len) {
-			std::cout << "It's double." << std::endl << std::endl;
-			if (32 <= static_cast<char>(d) && static_cast<char>(d) <= 127)
+			std::cout << "It's double or overflowed integer." << std::endl << std::endl;
+			if (d < -128 || d > 127)
+				std::cout << "char: impossible" << std::endl;
+			else if (32 <= static_cast<char>(d) && static_cast<char>(d) <= 127)
 				std::cout << "char: '" << static_cast<char>(d) << "'" << std::endl;
 			else
 				std::cout << "char: Non-displayable" << std::endl;
-			std::cout << "int: " << static_cast<int>(d) << std::endl;
-			std::cout << std::showpoint << "float: " << static_cast<float>(d) << "f" << std::endl;
+			if (is_impossible_int) {
+				std::cout << "int: impossible" << std::endl;
+			} else {
+				std::cout << "int: " << static_cast<int>(d) << std::endl;
+			}
+			if (d < std::numeric_limits<float>::min() || std::numeric_limits<float>::max() < d) {
+				std::cout << "float: impossible" << std::endl;
+			} else {
+				std::cout << std::showpoint << "float: " << static_cast<float>(d) << "f" << std::endl;
+			}
 			std::cout << std::showpoint << "double: " << static_cast<double>(d) << std::endl;
 			return ;
 		}
 	} catch (std::exception& e) {
-		std::cout << e.what() << std::endl;
+		// std::cout << e.what() << std::endl;
 	}
 
 	// Float
@@ -51,17 +63,23 @@ void	acuire_literal(std::string& str) {
 		f = std::stof(str, &len);
 		if (str.length() == len || (str.length() == len + 1 && str[str.length() - 1] == 'f')) {
 			std::cout << "It's float." << std::endl << std::endl;
-			if (32 <= static_cast<char>(f) && static_cast<char>(f) <= 127)
+			if (f < -128 || f > 127)
+				std::cout << "char: impossible" << std::endl;
+			else if (32 <= static_cast<char>(f) && static_cast<char>(f) <= 127)
 				std::cout << "char: '" << static_cast<char>(f) << "'" << std::endl;
 			else
 				std::cout << "char: Non-displayable" << std::endl;
-			std::cout << "int: " << static_cast<int>(f) << std::endl;
+			if (is_impossible_int) {
+				std::cout << "int: impossible" << std::endl;
+			} else {
+				std::cout << "int: " << static_cast<int>(f) << std::endl;
+			}
 			std::cout << std::showpoint << "float: " << static_cast<float>(f) << "f" << std::endl;
 			std::cout << std::showpoint << "double: " << static_cast<double>(f) << std::endl;
 			return ;
 		}
 	} catch (std::exception& e) {
-		std::cout << e.what() << std::endl;
+		// std::cout << e.what() << std::endl;
 	}
 
 	// Char
