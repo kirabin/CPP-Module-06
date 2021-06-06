@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <cmath>
 
 void	acuire_literal(std::string& str) {
 	char c;
@@ -25,9 +26,8 @@ void	acuire_literal(std::string& str) {
 			std::cout << std::fixed << std::setprecision(1) << "double: " << static_cast<double>(i) << std::endl;
 			return ;
 		}
-	} catch (std::exception& e) {
+	} catch (...) {
 		is_impossible_int = true;
-		// std::cout << e.what() << std::endl;
 	}
 
 	// Double
@@ -35,7 +35,7 @@ void	acuire_literal(std::string& str) {
 		d = std::stod(str, &len);
 		if (str.length() == len) {
 			std::cout << "It's double or overflowed integer." << std::endl << std::endl;
-			if (d < -128 || d > 127)
+			if (d < -128 || d > 127 || std::isnan(d))
 				std::cout << "char: impossible" << std::endl;
 			else if (32 <= static_cast<char>(d) && static_cast<char>(d) <= 127)
 				std::cout << "char: '" << static_cast<char>(d) << "'" << std::endl;
@@ -46,7 +46,12 @@ void	acuire_literal(std::string& str) {
 			} else {
 				std::cout << "int: " << static_cast<int>(d) << std::endl;
 			}
-			if (d < std::numeric_limits<float>::min() || std::numeric_limits<float>::max() < d) {
+			if (std::isinf(d) && d > 0) {
+				std::cout << "float: inff" << std::endl;
+			} else if (std::isinf(d) && d < 0) {
+				std::cout << "float: -inff" << std::endl;
+			}
+			else if (d < std::numeric_limits<float>::min() || std::numeric_limits<float>::max() < d) {
 				std::cout << "float: impossible" << std::endl;
 			} else {
 				std::cout << std::showpoint << "float: " << static_cast<float>(d) << "f" << std::endl;
@@ -54,9 +59,7 @@ void	acuire_literal(std::string& str) {
 			std::cout << std::showpoint << "double: " << static_cast<double>(d) << std::endl;
 			return ;
 		}
-	} catch (std::exception& e) {
-		// std::cout << e.what() << std::endl;
-	}
+	} catch (...) {}
 
 	// Float
 	// TODO: impossible char in case of nan etc.
@@ -64,7 +67,7 @@ void	acuire_literal(std::string& str) {
 		f = std::stof(str, &len);
 		if (str.length() == len || (str.length() == len + 1 && str[str.length() - 1] == 'f')) {
 			std::cout << "It's float." << std::endl << std::endl;
-			if (f < -128 || f > 127)
+			if (f < -128 || f > 127 || std::isnan(f))
 				std::cout << "char: impossible" << std::endl;
 			else if (32 <= static_cast<char>(f) && static_cast<char>(f) <= 127)
 				std::cout << "char: '" << static_cast<char>(f) << "'" << std::endl;
@@ -79,9 +82,7 @@ void	acuire_literal(std::string& str) {
 			std::cout << std::showpoint << "double: " << static_cast<double>(f) << std::endl;
 			return ;
 		}
-	} catch (std::exception& e) {
-		// std::cout << e.what() << std::endl;
-	}
+	} catch (...) {}
 
 	// Char
 	if (str.length() == 1) {
