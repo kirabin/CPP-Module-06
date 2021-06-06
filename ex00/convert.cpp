@@ -59,6 +59,7 @@ void	acuire_literal(std::string& str) {
 	}
 
 	// Float
+	// TODO: impossible char in case of nan etc.
 	try {
 		f = std::stof(str, &len);
 		if (str.length() == len || (str.length() == len + 1 && str[str.length() - 1] == 'f')) {

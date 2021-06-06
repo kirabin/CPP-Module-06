@@ -28,12 +28,39 @@ void identify_from_pointer(Base * p) {
 		std::cout << "Doesn't belong here" << std::endl;
 }
 
+void identify_from_reference(Base& p) {
+
+	try {
+		A& a = dynamic_cast<A&>(p);
+		(void)a;
+		std::cout << "A" << std::endl;
+		return;
+	} catch (...) {}
+
+	try {
+		B& b = dynamic_cast<B&>(p);
+		(void)b;
+		std::cout << "B" << std::endl;
+		return;
+	} catch (...) {}
+
+	try {
+		C& c = dynamic_cast<C&>(p);
+		(void)c;
+		std::cout << "C" << std::endl;
+		return;
+	} catch (...) {}
+	std::cout << "Doesn't belong here" << std::endl;
+}
+
 int main()
 {
 	void *nobody = NULL;
 	srand(time(NULL));
 	Base* some_base = generate();
+	Base& ref = *some_base;
 	identify_from_pointer(some_base);
+	identify_from_reference(ref);
 	identify_from_pointer(reinterpret_cast<Base *>(nobody));
 	return 0;
 }
